@@ -1,0 +1,94 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>GerenciadorPedidos.API</name>
+    </assembly>
+    <members>
+        <member name="M:GerenciadorPedidos.API.Controller.PedidosController.CriarPedido(GerenciadorPedidos.Domain.Entities.DataTransferObjects.NovoPedidoDTO)">
+            <summary>
+            Cria um novo pedido
+            </summary>
+            <param name="pedido">Dados do novo pedido</param>
+            <returns>Pedido criado</returns>
+            <response code="201">Pedido criado com sucesso</response>
+            <response code="400">Dados inválidos</response>
+            <response code="409">Pedido já existe</response>
+        </member>
+        <member name="M:GerenciadorPedidos.API.Controller.PedidosController.ObterPedidoPorId(System.Int32)">
+            <summary>
+            Obtém um pedido pelo ID
+            </summary>
+            <param name="id">ID do pedido</param>
+            <returns>Dados do pedido</returns>
+            <response code="200">Pedido encontrado</response>
+            <response code="404">Pedido não encontrado</response>
+        </member>
+        <member name="M:GerenciadorPedidos.API.Controller.PedidosController.ListarPedidosPorStatus(GerenciadorPedidos.Domain.Enums.EnumStatus)">
+            <summary>
+            Lista pedidos por status
+            </summary>
+            <param name="status">Status dos pedidos</param>
+            <returns>Lista de pedidos</returns>
+            <response code="200">Lista de pedidos</response>
+        </member>
+        <member name="T:GerenciadorPedidos.API.Program">
+            <summary>
+            Program
+            </summary>
+        </member>
+        <member name="M:GerenciadorPedidos.API.Program.Main(System.String[])">
+            <summary>
+            Main
+            </summary>
+            <param name="args"></param>                
+        </member>
+        <member name="T:GerenciadorPedidos.API.Swagger.SwaggerSetup">
+            <summary>
+            SwaggerSetup
+            </summary>
+        </member>
+        <member name="M:GerenciadorPedidos.API.Swagger.SwaggerSetup.AddSwaggerConfiguration(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            AddSwaggerConfiguration
+            </summary>
+            <param name="services">services</param>
+            <returns></returns>
+        </member>
+        <member name="M:GerenciadorPedidos.API.Swagger.SwaggerSetup.UseSwaggerConfiguration(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
+            <summary>
+            UseSwaggerConfiguration
+            </summary>
+            <param name="app">app</param>
+            <returns></returns>
+        </member>
+        <member name="T:GerenciadorPedidos.Startup">
+            <summary>
+            Startup
+            </summary>
+        </member>
+        <member name="P:GerenciadorPedidos.Startup.Configuration">
+            <summary>
+            Configuration
+            </summary>
+        </member>
+        <member name="M:GerenciadorPedidos.Startup.#ctor(Microsoft.Extensions.Hosting.IHostEnvironment)">
+            <summary>
+            StartUp
+            </summary>
+            <param name="env">en</param>
+        </member>
+        <member name="M:GerenciadorPedidos.Startup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            ConfigureServices
+            </summary>
+            <param name="services"></param>
+        </member>
+        <member name="M:GerenciadorPedidos.Startup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
+            <summary>
+            Configure
+            </summary>
+            <param name="app"></param>
+            <param name="env"></param>
+        </member>
+    </members>
+</doc>

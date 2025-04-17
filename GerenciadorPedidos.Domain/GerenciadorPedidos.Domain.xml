@@ -1,0 +1,263 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>GerenciadorPedidos.Domain</name>
+    </assembly>
+    <members>
+        <member name="P:GerenciadorPedidos.Domain.Entities.DataTransferObjects.NovoPedidoDTO.PedidoId">
+            <summary>
+            ID do pedido no sistema externo
+            </summary>
+        </member>
+        <member name="P:GerenciadorPedidos.Domain.Entities.DataTransferObjects.NovoPedidoDTO.ClienteId">
+            <summary>
+            ID do cliente
+            </summary>
+        </member>
+        <member name="P:GerenciadorPedidos.Domain.Entities.DataTransferObjects.NovoPedidoDTO.Itens">
+            <summary>
+            Lista de itens do pedido
+            </summary>
+        </member>
+        <member name="T:GerenciadorPedidos.Domain.Entities.DataTransferObjects.PedidoCriadoDTO">
+            <summary>
+            DTO que representa o retorno simplificado de um pedido criado
+            </summary>
+        </member>
+        <member name="P:GerenciadorPedidos.Domain.Entities.DataTransferObjects.PedidoCriadoDTO.Id">
+            <summary>
+            Identificador único do pedido
+            </summary>
+        </member>
+        <member name="P:GerenciadorPedidos.Domain.Entities.DataTransferObjects.PedidoCriadoDTO.Status">
+            <summary>
+            Status atual do pedido
+            </summary>
+        </member>
+        <member name="P:GerenciadorPedidos.Domain.Entities.DataTransferObjects.PedidoItemDTO.ProdutoId">
+            <summary>
+            ID do produto
+            </summary>
+        </member>
+        <member name="P:GerenciadorPedidos.Domain.Entities.DataTransferObjects.PedidoItemDTO.Quantidade">
+            <summary>
+            Quantidade do produto
+            </summary>
+        </member>
+        <member name="P:GerenciadorPedidos.Domain.Entities.DataTransferObjects.PedidoItemDTO.Valor">
+            <summary>
+            Valor unitário do produto
+            </summary>
+        </member>
+        <member name="M:GerenciadorPedidos.Domain.Entities.DataTransferObjects.PedidoItemDTO.#ctor(System.Int32,System.Int32,System.Decimal)">
+            <summary>
+            Inicializa uma nova instância do DTO de item de pedido com os valores especificados.
+            </summary>
+            <param name="produtoId">ID do produto</param>
+            <param name="quantidade">Quantidade do produto</param>
+            <param name="valor">Valor unitário do produto</param>
+        </member>
+        <member name="M:GerenciadorPedidos.Domain.Entities.DataTransferObjects.PedidoItemDTO.#ctor">
+            <summary>
+            Inicializa uma nova instância vazia do DTO de item de pedido.
+            Este construtor é necessário para serialização/desserialização e para o funcionamento do AutoMapper.
+            </summary>
+        </member>
+        <member name="P:GerenciadorPedidos.Domain.Entities.DataTransferObjects.PedidoResponseDTO.Id">
+            <summary>
+            ID interno do pedido
+            </summary>
+        </member>
+        <member name="P:GerenciadorPedidos.Domain.Entities.DataTransferObjects.PedidoResponseDTO.PedidoId">
+            <summary>
+            ID do pedido no sistema externo
+            </summary>
+        </member>
+        <member name="P:GerenciadorPedidos.Domain.Entities.DataTransferObjects.PedidoResponseDTO.ClienteId">
+            <summary>
+            ID do cliente
+            </summary>
+        </member>
+        <member name="P:GerenciadorPedidos.Domain.Entities.DataTransferObjects.PedidoResponseDTO.Imposto">
+            <summary>
+            Valor do imposto calculado
+            </summary>
+        </member>
+        <member name="P:GerenciadorPedidos.Domain.Entities.DataTransferObjects.PedidoResponseDTO.Itens">
+            <summary>
+            Lista de itens do pedido
+            </summary>
+        </member>
+        <member name="P:GerenciadorPedidos.Domain.Entities.DataTransferObjects.PedidoResponseDTO.Status">
+            <summary>
+            Status atual do pedido
+            </summary>
+        </member>
+        <member name="T:GerenciadorPedidos.Domain.Entities.Objects.Pedido">
+            <summary>
+            Representa um pedido no sistema
+            </summary>
+        </member>
+        <member name="M:GerenciadorPedidos.Domain.Entities.Objects.Pedido.AtualizarImposto(System.Decimal)">
+            <summary>
+            Atualiza o valor do imposto do pedido
+            </summary>
+            <param name="valorImposto">Valor do imposto calculado</param>
+        </member>
+        <member name="T:GerenciadorPedidos.Domain.Entities.Objects.PedidoItem">
+            <summary>
+            Representa um item de um pedido
+            </summary>
+        </member>
+        <member name="M:GerenciadorPedidos.Domain.Entities.Objects.PedidoItem.#ctor(System.Int32,System.Int32,System.Decimal)">
+            <summary>
+            Validação de dados do pedido item
+            </summary>
+        </member>
+        <member name="T:GerenciadorPedidos.Domain.Enums.EnumStatus">
+            <summary>
+            Enum que representa os possíveis status de um pedido
+            </summary>
+        </member>
+        <member name="F:GerenciadorPedidos.Domain.Enums.EnumStatus.Criado">
+            <summary>
+            Pedido criado
+            </summary>
+        </member>
+        <member name="F:GerenciadorPedidos.Domain.Enums.EnumStatus.EmProcessamento">
+            <summary>
+            Pedido em processamento
+            </summary>
+        </member>
+        <member name="F:GerenciadorPedidos.Domain.Enums.EnumStatus.Enviado">
+            <summary>
+            Pedido enviado
+            </summary>
+        </member>
+        <member name="F:GerenciadorPedidos.Domain.Enums.EnumStatus.Entregue">
+            <summary>
+            Pedido entregue
+            </summary>
+        </member>
+        <member name="F:GerenciadorPedidos.Domain.Enums.EnumStatus.Cancelado">
+            <summary>
+            Pedido cancelado
+            </summary>
+        </member>
+        <member name="T:GerenciadorPedidos.Domain.Interfaces.ICalculoImpostoFactory">
+            <summary>
+            Interface para a fábrica de cálculo de impostos
+            </summary>
+        </member>
+        <member name="M:GerenciadorPedidos.Domain.Interfaces.ICalculoImpostoFactory.CriarEstrategia(System.String)">
+            <summary>
+            Cria uma estratégia de cálculo de imposto
+            </summary>
+            <param name="nome">Nome da estratégia</param>
+            <returns>Estratégia de cálculo de imposto</returns>
+        </member>
+        <member name="T:GerenciadorPedidos.Domain.Interfaces.ICalculoImpostoStrategy">
+            <summary>
+            Interface que define a estratégia de cálculo de impostos
+            </summary>
+        </member>
+        <member name="P:GerenciadorPedidos.Domain.Interfaces.ICalculoImpostoStrategy.Nome">
+            <summary>
+            Nome da estratégia de cálculo
+            </summary>
+        </member>
+        <member name="M:GerenciadorPedidos.Domain.Interfaces.ICalculoImpostoStrategy.CalcularImposto(GerenciadorPedidos.Domain.Entities.Objects.Pedido)">
+            <summary>
+            Calcula o valor do imposto para um pedido
+            </summary>
+            <param name="pedido">Pedido para cálculo do imposto</param>
+            <returns>Valor do imposto calculado</returns>
+        </member>
+        <member name="T:GerenciadorPedidos.Domain.Interfaces.IFeatureFlagService">
+            <summary>
+            Interface para gerenciamento de feature flags
+            </summary>
+        </member>
+        <member name="M:GerenciadorPedidos.Domain.Interfaces.IFeatureFlagService.IsEnabled(System.String)">
+            <summary>
+            Verifica se uma feature flag está ativa
+            </summary>
+            <param name="featureName">Nome da feature flag</param>
+            <returns>True se a feature flag estiver ativa, false caso contrário</returns>
+        </member>
+        <member name="T:GerenciadorPedidos.Domain.Interfaces.IServices.ICalculadoraImpostoService">
+            <summary>
+            Interface para o serviço de cálculo de impostos
+            </summary>
+        </member>
+        <member name="M:GerenciadorPedidos.Domain.Interfaces.IServices.ICalculadoraImpostoService.CalcularImposto(GerenciadorPedidos.Domain.Entities.Objects.Pedido)">
+            <summary>
+            Calcula o imposto para um pedido
+            </summary>
+            <param name="pedido">Pedido para cálculo do imposto</param>
+            <returns>Valor do imposto calculado</returns>
+        </member>
+        <member name="T:GerenciadorPedidos.Domain.Services.CalculadoraImpostoService">
+            <summary>
+            Serviço principal de cálculo de impostos.
+            Utiliza Feature Flags para determinar qual estratégia de cálculo aplicar.
+            Exemplo de configuração: "FeatureFlags": { "ReformaTributaria": false }
+            </summary>
+        </member>
+        <member name="M:GerenciadorPedidos.Domain.Services.CalculadoraImpostoService.CalcularImposto(GerenciadorPedidos.Domain.Entities.Objects.Pedido)">
+            <summary>
+            Calcula o imposto para um pedido
+            </summary>
+            <param name="pedido">Pedido para cálculo do imposto</param>
+            <returns>Valor do imposto calculado</returns>
+        </member>
+        <member name="T:GerenciadorPedidos.Domain.Services.CalculoImpostoFactory">
+            <summary>
+            Factory responsável pela criação das estratégias de cálculo de imposto.
+            Cria a estratégia apropriada baseada na Feature Flag "ReformaTributaria".
+            Exemplo de configuração: "FeatureFlags": { "ReformaTributaria": false }
+            </summary>
+        </member>
+        <member name="M:GerenciadorPedidos.Domain.Services.CalculoImpostoFactory.CriarEstrategia(System.String)">
+            <summary>
+            Cria uma estratégia de cálculo de imposto
+            </summary>
+            <param name="nome">Nome da estratégia</param>
+            <returns>Estratégia de cálculo de imposto</returns>
+            <exception cref="T:System.ArgumentException">Se a estratégia não existir</exception>
+        </member>
+        <member name="T:GerenciadorPedidos.Domain.Services.CalculoImpostoReformaStrategyServices">
+            <summary>
+            Estratégia de cálculo de imposto da reforma.
+            Calcula o imposto com base na nova alíquota da reforma.
+            </summary>
+        </member>
+        <member name="M:GerenciadorPedidos.Domain.Services.CalculoImpostoReformaStrategyServices.CalcularImposto(GerenciadorPedidos.Domain.Entities.Objects.Pedido)">
+            <summary>
+            Calcula o imposto para um pedido baseado na alíquota da reforma
+            </summary>
+            <param name="pedido">Pedido para cálculo do imposto</param>
+            <returns>Valor do imposto calculado</returns>
+        </member>
+        <member name="T:GerenciadorPedidos.Domain.Services.CalculoImpostoVigenteStrategyServices">
+            <summary>
+            Estratégia de cálculo de imposto vigente.
+            Calcula o imposto com base na alíquota atual.
+            </summary>
+        </member>
+        <member name="M:GerenciadorPedidos.Domain.Services.CalculoImpostoVigenteStrategyServices.CalcularImposto(GerenciadorPedidos.Domain.Entities.Objects.Pedido)">
+            <summary>
+            Calcula o imposto para um pedido baseado na alíquota vigente
+            </summary>
+            <param name="pedido">Pedido para cálculo do imposto</param>
+            <returns>Valor do imposto calculado</returns>
+        </member>
+        <member name="T:GerenciadorPedidos.Domain.Services.FeatureFlagService">
+            <summary>
+            Serviço responsável por gerenciar as Feature Flags do sistema.
+            Controla a ativação/desativação de funcionalidades como a Reforma Tributária.
+            Exemplo de configuração: "FeatureFlags": { "ReformaTributaria": false }
+            </summary>
+        </member>
+    </members>
+</doc>
