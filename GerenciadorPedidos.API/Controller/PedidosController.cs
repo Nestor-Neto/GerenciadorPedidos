@@ -36,9 +36,15 @@ namespace GerenciadorPedidos.API.Controller
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         public async Task<IActionResult> CriarPedido([FromBody] NovoPedidoDTO pedido)
         {
+            if (pedido == null)
+            {
+                _logger.LogWarning("Tentativa de criar pedido com dados nulos");
+                return BadRequest(new { message = "Os dados do pedido são obrigatórios" });
+            }
+
             try
             {
-                _logger.LogInformation("Iniciando criação do pedido {PedidoId}", pedido?.PedidoId);
+                _logger.LogInformation("Iniciando criação do pedido {PedidoId}", pedido.PedidoId);
 
                 var pedidoCriado = await _pedidoService.CriarPedidoAsync(pedido);
                 var response = new PedidoCriadoDTO
@@ -49,7 +55,7 @@ namespace GerenciadorPedidos.API.Controller
 
                 return CreatedAtAction(nameof(ObterPedidoPorId), new { id = response.Id }, response);
             }
-            catch (DomainException ex) when (ex.Message.Contains("já existe"))
+            catch (DomainException ex) when (ex.Message.Contains("já existe", StringComparison.OrdinalIgnoreCase))
             {
                 _logger.LogWarning(ex, "Pedido duplicado: {Message}", ex.Message);
                 return Conflict(new { message = ex.Message });

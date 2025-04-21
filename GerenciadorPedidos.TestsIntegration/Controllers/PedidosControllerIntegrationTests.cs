@@ -4,20 +4,21 @@ using System.Text.Json;
 using FluentAssertions;
 using GerenciadorPedidos.Domain.Entities.DataTransferObjects;
 using GerenciadorPedidos.Domain.Enums;
+using GerenciadorPedidos.API;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Xunit;
 
 namespace GerenciadorPedidos.TestsIntegration.Controllers
 {
-    public class PedidosControllerIntegrationTests : IClassFixture<WebApplicationFactory<TestStartup>>
+    public class PedidosControllerIntegrationTests : IClassFixture<WebApplicationFactory<Program>>
     {
-        private readonly WebApplicationFactory<TestStartup> _factory;
+        private readonly WebApplicationFactory<Program> _factory;
         private readonly HttpClient _client;
         private readonly JsonSerializerOptions _jsonOptions;
 
-        public PedidosControllerIntegrationTests(WebApplicationFactory<TestStartup> factory)
+        public PedidosControllerIntegrationTests(WebApplicationFactory<Program> factory)
         {
-            _factory = factory;
+            _factory = TestStartup.CreateTestFactory();
             _client = _factory.CreateClient();
             _jsonOptions = new JsonSerializerOptions
             {

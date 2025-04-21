@@ -26,7 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GerenciadorPedidos\GerenciadorPedidos.API.csproj" />
+    <ProjectReference Include="..\GerenciadorPedidos.API\GerenciadorPedidos.API.csproj" />
     <ProjectReference Include="..\GerenciadorPedidos.Domain\GerenciadorPedidos.Domain.csproj" />
   </ItemGroup>
 

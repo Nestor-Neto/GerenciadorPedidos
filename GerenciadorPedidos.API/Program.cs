@@ -55,7 +55,7 @@ namespace GerenciadorPedidos.API
             builder.Services.AddScoped<IPedidoRepository, PedidoRepository>();
             builder.Services.AddScoped<ICalculadoraImpostoService, CalculadoraImpostoService>();
             builder.Services.AddScoped<ISistemaBService, SistemaBService>();
-            builder.Services.AddScoped<ICalculoImpostoFactory, CalculoImpostoFactory>();
+            builder.Services.AddScoped<ICalculoImpostoFactoryServices, CalculoImpostoFactoryServices>();
             builder.Services.AddScoped<IFeatureFlagService, FeatureFlagService>();
 
             // Registro das estratégias de cálculo de imposto

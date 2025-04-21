@@ -13,6 +13,14 @@ namespace GerenciadorPedidos.Domain.Entities.Objects
         public int ClienteId { get; private set; }
         public decimal Imposto { get; private set; }
         public EnumStatus Status { get; private set; }
+        
+        /// <summary>
+        /// Data e hora de criação do pedido em UTC
+        /// Usado para controle e filtros de período
+        /// </summary>
+        public DateTime DataCriacao { get; private set; }
+
+
         private readonly List<PedidoItem> _itens;
         public IReadOnlyCollection<PedidoItem> Itens => _itens.AsReadOnly();
 
@@ -20,9 +28,11 @@ namespace GerenciadorPedidos.Domain.Entities.Objects
         {
             _itens = new List<PedidoItem>();
             Status = EnumStatus.Criado;
+            DataCriacao = DateTime.UtcNow;
+            
         }
 
-        public Pedido(int pedidoId, int clienteId)
+        public Pedido(int pedidoId, int clienteId) : this()
         {
             if (pedidoId <= 0)
                 throw new DomainException("O ID do pedido deve ser maior que zero");
@@ -32,8 +42,6 @@ namespace GerenciadorPedidos.Domain.Entities.Objects
 
             PedidoId = pedidoId;
             ClienteId = clienteId;
-            Status = EnumStatus.Criado;
-            _itens = new List<PedidoItem>();
         }
 
         public void AdicionarItem(PedidoItem item)
@@ -42,22 +50,7 @@ namespace GerenciadorPedidos.Domain.Entities.Objects
                 throw new DomainException("O item não pode ser nulo");
 
             _itens.Add(item);
-        }
-
-        public decimal CalcularValorTotal()
-        {
-            return _itens.Sum(item => item.CalcularSubtotal());
-        }
-
-        public void CalcularImposto(bool usarNovoCalculo)
-        {
-            var valorTotal = CalcularValorTotal();
-            Imposto = usarNovoCalculo ? valorTotal * 0.2m : valorTotal * 0.3m;
-        }
-
-        public void AtualizarStatus(EnumStatus novoStatus)
-        {
-            Status = novoStatus;
+             
         }
 
         /// <summary>
@@ -67,6 +60,8 @@ namespace GerenciadorPedidos.Domain.Entities.Objects
         public void AtualizarImposto(decimal valorImposto)
         {
             Imposto = valorImposto;
+             
         }
+
     }
 }

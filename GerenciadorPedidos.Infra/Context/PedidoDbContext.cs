@@ -1,6 +1,4 @@
-﻿
-
-using GerenciadorPedidos.Domain.Entities.Objects;
+﻿using GerenciadorPedidos.Domain.Entities.Objects;
 using Microsoft.EntityFrameworkCore;
 
 namespace GerenciadorPedidos.Infra.Context
@@ -23,9 +21,15 @@ namespace GerenciadorPedidos.Infra.Context
                 entity.Property(e => e.ClienteId).IsRequired();
                 entity.Property(e => e.Status).IsRequired().HasMaxLength(50);
                 entity.Property(e => e.Imposto).HasPrecision(18, 2);
+                
+                entity.Property(e => e.DataCriacao)
+                    .IsRequired()
+                    .ValueGeneratedOnAdd();
 
                 entity.HasIndex(e => e.PedidoId).IsUnique();
                 entity.HasIndex(e => e.Status);
+                entity.HasIndex(e => e.DataCriacao);
+                entity.HasIndex(e => new { e.Status, e.DataCriacao });
             });
 
             modelBuilder.Entity<PedidoItem>(entity =>

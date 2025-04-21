@@ -34,9 +34,9 @@ namespace GerenciadorPedidos.Infra.CrossCutting.IoC
             services.AddScoped<ISistemaBService, SistemaBService>();
             services.AddScoped<IPedidoRepository, PedidoRepository>();
             services.AddScoped<IPedidoService, PedidoService>();
-            services.AddScoped<ICalculoImpostoFactory, CalculoImpostoFactory>();
-            services.AddScoped<ICalculoImpostoStrategy, CalculoImpostoVigenteStrategyServices>();
-            services.AddScoped<ICalculoImpostoStrategy, CalculoImpostoReformaStrategyServices>();
+            services.AddScoped<ICalculoImpostoFactoryServices, CalculoImpostoFactoryServices>();
+            services.AddScoped<ICalculoImpostoStrategyServices, CalculoImpostoVigenteStrategyServices>();
+            services.AddScoped<ICalculoImpostoStrategyServices, CalculoImpostoReformaStrategyServices>();
             services.AddScoped<IFeatureFlagService, FeatureFlagService>();
 
             #endregion

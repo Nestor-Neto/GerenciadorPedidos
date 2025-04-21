@@ -112,7 +112,7 @@ namespace GerenciadorPedidos
             });
 
             // Registra as estratégias de cálculo de imposto
-            services.AddScoped<ICalculoImpostoFactory, CalculoImpostoFactory>();
+            services.AddScoped<ICalculoImpostoFactoryServices, CalculoImpostoFactoryServices>();
             services.AddScoped<IFeatureFlagService, FeatureFlagService>();
         }
 

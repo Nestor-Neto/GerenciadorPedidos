@@ -28,6 +28,12 @@ namespace GerenciadorPedidos.Domain.Entities.DataTransferObjects
         /// </summary>
         public decimal Imposto { get; set; }
 
+
+        /// <summary>
+        /// Data e hora de criação do pedido
+        /// </summary>
+        public DateTime DataCriacao { get; set; }
+
         /// <summary>
         /// Lista de itens do pedido
         /// </summary>

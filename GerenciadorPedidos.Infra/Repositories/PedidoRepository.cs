@@ -23,12 +23,15 @@ namespace GerenciadorPedidos.Infra.Repositories
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _unitOfWork = new UnitOfWork<Pedido>(context);
         }
+
         public async Task<Pedido> AdicionarAsync(Pedido pedido)
         {
             if (pedido == null)
                 throw new ArgumentNullException(nameof(pedido));
 
-            _logger.LogInformation("Adicionando pedido {PedidoId} para o cliente {ClienteId}", pedido.PedidoId, pedido.ClienteId);
+            _logger.LogInformation("Adicionando pedido {PedidoId} para o cliente {ClienteId}", 
+                pedido.PedidoId, pedido.ClienteId);
+
             await _context.Pedidos.AddAsync(pedido);
             await _unitOfWork.CommitAsync();
             return pedido;

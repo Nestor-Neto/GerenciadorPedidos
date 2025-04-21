@@ -6,7 +6,7 @@ namespace GerenciadorPedidos.Domain.Interfaces;
 public interface IFeatureFlagService
 {
     /// <summary>
-    /// Verifica se uma feature flag está ativa
+    /// Verifica se uma feature flag está ativa, qual o status.
     /// </summary>
     /// <param name="featureName">Nome da feature flag</param>
     /// <returns>True se a feature flag estiver ativa, false caso contrário</returns>

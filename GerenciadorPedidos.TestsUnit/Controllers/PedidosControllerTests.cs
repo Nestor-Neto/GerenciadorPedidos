@@ -32,7 +32,10 @@ namespace GerenciadorPedidos.TestsUnit.Controllers
         // Classe para representar a resposta de erro
         private class ErrorResponse
         {
+            [JsonProperty("message")]
             public string Message { get; set; } = string.Empty;
+            
+            [JsonProperty("details")]
             public string? Details { get; set; }
         }
 
@@ -114,7 +117,10 @@ namespace GerenciadorPedidos.TestsUnit.Controllers
             var conflictResult = result as ConflictObjectResult;
             conflictResult.Should().NotBeNull();
             conflictResult!.StatusCode.Should().Be(409);
-            var response = conflictResult.Value as ErrorResponse;
+            
+            // Deserializa o objeto anônimo para ErrorResponse
+            var jsonResponse = JsonConvert.SerializeObject(conflictResult.Value);
+            var response = JsonConvert.DeserializeObject<ErrorResponse>(jsonResponse);
             response.Should().NotBeNull();
             response!.Message.Should().Be(mensagemErro);
         }
@@ -151,7 +157,10 @@ namespace GerenciadorPedidos.TestsUnit.Controllers
             var badRequestResult = result as BadRequestObjectResult;
             badRequestResult.Should().NotBeNull();
             badRequestResult!.StatusCode.Should().Be(400);
-            var response = badRequestResult.Value as ErrorResponse;
+            
+            // Deserializa o objeto anônimo para ErrorResponse
+            var jsonResponse = JsonConvert.SerializeObject(badRequestResult.Value);
+            var response = JsonConvert.DeserializeObject<ErrorResponse>(jsonResponse);
             response.Should().NotBeNull();
             response!.Message.Should().Be(mensagemErro);
         }
@@ -188,7 +197,10 @@ namespace GerenciadorPedidos.TestsUnit.Controllers
             var objectResult = result as ObjectResult;
             objectResult.Should().NotBeNull();
             objectResult!.StatusCode.Should().Be(500);
-            var response = objectResult.Value as ErrorResponse;
+            
+            // Deserializa o objeto anônimo para ErrorResponse
+            var jsonResponse = JsonConvert.SerializeObject(objectResult.Value);
+            var response = JsonConvert.DeserializeObject<ErrorResponse>(jsonResponse);
             response.Should().NotBeNull();
             response!.Message.Should().Be("Erro interno ao processar o pedido");
             response.Details.Should().Be(mensagemErro);
@@ -254,7 +266,10 @@ namespace GerenciadorPedidos.TestsUnit.Controllers
             var notFoundResult = result as NotFoundObjectResult;
             notFoundResult.Should().NotBeNull();
             notFoundResult!.StatusCode.Should().Be(404);
-            var response = notFoundResult.Value as ErrorResponse;
+            
+            // Deserializa o objeto anônimo para ErrorResponse
+            var jsonResponse = JsonConvert.SerializeObject(notFoundResult.Value);
+            var response = JsonConvert.DeserializeObject<ErrorResponse>(jsonResponse);
             response.Should().NotBeNull();
             response!.Message.Should().Be($"Pedido com ID {id} não encontrado");
         }
@@ -277,7 +292,10 @@ namespace GerenciadorPedidos.TestsUnit.Controllers
             var objectResult = result as ObjectResult;
             objectResult.Should().NotBeNull();
             objectResult!.StatusCode.Should().Be(500);
-            var response = objectResult.Value as ErrorResponse;
+            
+            // Deserializa o objeto anônimo para ErrorResponse
+            var jsonResponse = JsonConvert.SerializeObject(objectResult.Value);
+            var response = JsonConvert.DeserializeObject<ErrorResponse>(jsonResponse);
             response.Should().NotBeNull();
             response!.Message.Should().Be("Erro interno ao processar a requisição");
             response.Details.Should().Be(mensagemErro);
@@ -343,7 +361,10 @@ namespace GerenciadorPedidos.TestsUnit.Controllers
             var objectResult = result as ObjectResult;
             objectResult.Should().NotBeNull();
             objectResult!.StatusCode.Should().Be(500);
-            var response = objectResult.Value as ErrorResponse;
+            
+            // Deserializa o objeto anônimo para ErrorResponse
+            var jsonResponse = JsonConvert.SerializeObject(objectResult.Value);
+            var response = JsonConvert.DeserializeObject<ErrorResponse>(jsonResponse);
             response.Should().NotBeNull();
             response!.Message.Should().Be("Erro interno ao processar a requisição");
             response.Details.Should().Be(mensagemErro);

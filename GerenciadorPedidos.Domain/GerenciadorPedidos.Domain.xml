@@ -83,6 +83,11 @@
             Valor do imposto calculado
             </summary>
         </member>
+        <member name="P:GerenciadorPedidos.Domain.Entities.DataTransferObjects.PedidoResponseDTO.DataCriacao">
+            <summary>
+            Data e hora de criação do pedido
+            </summary>
+        </member>
         <member name="P:GerenciadorPedidos.Domain.Entities.DataTransferObjects.PedidoResponseDTO.Itens">
             <summary>
             Lista de itens do pedido
@@ -96,6 +101,12 @@
         <member name="T:GerenciadorPedidos.Domain.Entities.Objects.Pedido">
             <summary>
             Representa um pedido no sistema
+            </summary>
+        </member>
+        <member name="P:GerenciadorPedidos.Domain.Entities.Objects.Pedido.DataCriacao">
+            <summary>
+            Data e hora de criação do pedido em UTC
+            Usado para controle e filtros de período
             </summary>
         </member>
         <member name="M:GerenciadorPedidos.Domain.Entities.Objects.Pedido.AtualizarImposto(System.Decimal)">
@@ -144,29 +155,30 @@
             Pedido cancelado
             </summary>
         </member>
-        <member name="T:GerenciadorPedidos.Domain.Interfaces.ICalculoImpostoFactory">
+        <member name="T:GerenciadorPedidos.Domain.Exceptions.DomainException">
+            <summary>
+            Exceção base para erros de domínio. Representa violações de regras de negócio e validações do domínio.
+            Deve ser usada quando uma operação viola as regras de negócio estabelecidas.
+            </summary>
+        </member>
+        <member name="T:GerenciadorPedidos.Domain.Interfaces.ICalculoImpostoFactoryServices">
             <summary>
             Interface para a fábrica de cálculo de impostos
             </summary>
         </member>
-        <member name="M:GerenciadorPedidos.Domain.Interfaces.ICalculoImpostoFactory.CriarEstrategia(System.String)">
+        <member name="M:GerenciadorPedidos.Domain.Interfaces.ICalculoImpostoFactoryServices.CriarEstrategia(System.String)">
             <summary>
             Cria uma estratégia de cálculo de imposto
             </summary>
             <param name="nome">Nome da estratégia</param>
             <returns>Estratégia de cálculo de imposto</returns>
         </member>
-        <member name="T:GerenciadorPedidos.Domain.Interfaces.ICalculoImpostoStrategy">
+        <member name="T:GerenciadorPedidos.Domain.Interfaces.ICalculoImpostoStrategyServices">
             <summary>
-            Interface que define a estratégia de cálculo de impostos
+            Interface que define o valor do imposto a ser calculado
             </summary>
         </member>
-        <member name="P:GerenciadorPedidos.Domain.Interfaces.ICalculoImpostoStrategy.Nome">
-            <summary>
-            Nome da estratégia de cálculo
-            </summary>
-        </member>
-        <member name="M:GerenciadorPedidos.Domain.Interfaces.ICalculoImpostoStrategy.CalcularImposto(GerenciadorPedidos.Domain.Entities.Objects.Pedido)">
+        <member name="M:GerenciadorPedidos.Domain.Interfaces.ICalculoImpostoStrategyServices.CalcularImposto(GerenciadorPedidos.Domain.Entities.Objects.Pedido)">
             <summary>
             Calcula o valor do imposto para um pedido
             </summary>
@@ -180,10 +192,39 @@
         </member>
         <member name="M:GerenciadorPedidos.Domain.Interfaces.IFeatureFlagService.IsEnabled(System.String)">
             <summary>
-            Verifica se uma feature flag está ativa
+            Verifica se uma feature flag está ativa, qual o status.
             </summary>
             <param name="featureName">Nome da feature flag</param>
             <returns>True se a feature flag estiver ativa, false caso contrário</returns>
+        </member>
+        <member name="T:GerenciadorPedidos.Domain.Interfaces.IServices.ICacheService">
+            <summary>
+            Interface para serviço de cache
+            Utilizada para otimizar consultas frequentes
+            </summary>
+        </member>
+        <member name="M:GerenciadorPedidos.Domain.Interfaces.IServices.ICacheService.ObterAsync``1(System.String)">
+            <summary>
+            Obtém um item do cache
+            </summary>
+            <typeparam name="T">Tipo do item</typeparam>
+            <param name="key">Chave do item no cache</param>
+            <returns>Item do cache ou null se não encontrado</returns>
+        </member>
+        <member name="M:GerenciadorPedidos.Domain.Interfaces.IServices.ICacheService.ArmazenarAsync``1(System.String,``0,System.TimeSpan)">
+            <summary>
+            Armazena um item no cache
+            </summary>
+            <typeparam name="T">Tipo do item</typeparam>
+            <param name="key">Chave para armazenamento</param>
+            <param name="value">Valor a ser armazenado</param>
+            <param name="expiracao">Tempo de expiração do item</param>
+        </member>
+        <member name="M:GerenciadorPedidos.Domain.Interfaces.IServices.ICacheService.RemoverAsync(System.String)">
+            <summary>
+            Remove um item do cache
+            </summary>
+            <param name="key">Chave do item a ser removido</param>
         </member>
         <member name="T:GerenciadorPedidos.Domain.Interfaces.IServices.ICalculadoraImpostoService">
             <summary>
@@ -199,32 +240,75 @@
         </member>
         <member name="T:GerenciadorPedidos.Domain.Services.CalculadoraImpostoService">
             <summary>
-            Serviço principal de cálculo de impostos.
+            Serviço principal responsável pelo cálculo de impostos.
+            Implementa o padrão Strategy para alternar entre diferentes formas de cálculo.
             Utiliza Feature Flags para determinar qual estratégia de cálculo aplicar.
-            Exemplo de configuração: "FeatureFlags": { "ReformaTributaria": false }
             </summary>
+        </member>
+        <member name="F:GerenciadorPedidos.Domain.Services.CalculadoraImpostoService._calculoImpostoFactoryServices">
+            <summary>
+            Factory responsável por criar as estratégias de cálculo de imposto.
+            Utiliza injeção de dependência para instanciar as implementações corretas.
+            </summary>
+        </member>
+        <member name="F:GerenciadorPedidos.Domain.Services.CalculadoraImpostoService._featureFlagService">
+            <summary>
+            Serviço que gerencia as feature flags do sistema.
+            Permite alternar entre diferentes comportamentos em tempo de execução.
+            </summary>
+        </member>
+        <member name="F:GerenciadorPedidos.Domain.Services.CalculadoraImpostoService._mockLogger">
+            <summary>
+            Logger para registro de operações e diagnóstico do sistema.
+            </summary>
+        </member>
+        <member name="F:GerenciadorPedidos.Domain.Services.CalculadoraImpostoService.FeatureFlagReformaTributaria">
+            <summary>
+            Nome da feature flag que controla a estratégia de cálculo.
+            Quando true: usa reforma tributária (20%)
+            Quando false: usa regra vigente (30%)
+            </summary>
+        </member>
+        <member name="M:GerenciadorPedidos.Domain.Services.CalculadoraImpostoService.#ctor(GerenciadorPedidos.Domain.Interfaces.ICalculoImpostoFactoryServices,GerenciadorPedidos.Domain.Interfaces.IFeatureFlagService,Microsoft.Extensions.Logging.ILogger{GerenciadorPedidos.Domain.Services.CalculadoraImpostoService})">
+            <summary>
+            Construtor que inicializa o serviço com suas dependências.
+            </summary>
+            <param name="calculoImpostoFactory">Factory para criar estratégias de cálculo</param>
+            <param name="featureFlagService">Serviço de feature flags</param>
+            <param name="logger">Serviço de logging</param>
+            <exception cref="T:System.ArgumentNullException">Lançada se alguma dependência for nula</exception>
         </member>
         <member name="M:GerenciadorPedidos.Domain.Services.CalculadoraImpostoService.CalcularImposto(GerenciadorPedidos.Domain.Entities.Objects.Pedido)">
             <summary>
-            Calcula o imposto para um pedido
+            Calcula o imposto para um pedido baseado na configuração atual do sistema.
+            O cálculo é determinado pela feature flag "ReformaTributaria":
+            - Se ativa: usa alíquota de 20% (reforma tributária)
+            - Se inativa: usa alíquota de 30% (regra vigente)
             </summary>
             <param name="pedido">Pedido para cálculo do imposto</param>
             <returns>Valor do imposto calculado</returns>
+            <exception cref="T:System.ArgumentException">
+            Lançada se a estratégia de cálculo não for encontrada
+            </exception>
         </member>
-        <member name="T:GerenciadorPedidos.Domain.Services.CalculoImpostoFactory">
+        <member name="F:GerenciadorPedidos.Domain.Services.CalculoImpostoFactoryServices._serviceProvider">
             <summary>
-            Factory responsável pela criação das estratégias de cálculo de imposto.
-            Cria a estratégia apropriada baseada na Feature Flag "ReformaTributaria".
-            Exemplo de configuração: "FeatureFlags": { "ReformaTributaria": false }
+            Container de injeção de dependência que permite criar instâncias de serviços registrados.
+            Usado para criar dinamicamente as estratégias de cálculo de imposto em tempo de execução.
+            O IServiceProvider mantém o ciclo de vida dos objetos e suas dependências.
             </summary>
         </member>
-        <member name="M:GerenciadorPedidos.Domain.Services.CalculoImpostoFactory.CriarEstrategia(System.String)">
+        <member name="F:GerenciadorPedidos.Domain.Services.CalculoImpostoFactoryServices._strategies">
             <summary>
-            Cria uma estratégia de cálculo de imposto
+            Dicionário que mapeia os nomes das estratégias para seus respectivos tipos.
+            - Chave (string): Nome identificador da estratégia (ex: "Vigente", "Reforma")
+            - Valor (Type): Tipo da classe que implementa a estratégia
+            
+            Este dicionário funciona como um registro de estratégias disponíveis,
+            permitindo a criação dinâmica da estratégia correta com base no nome.
+            
+            Importante: Todas as estratégias devem implementar ICalculoImpostoStrategyServices.
             </summary>
-            <param name="nome">Nome da estratégia</param>
-            <returns>Estratégia de cálculo de imposto</returns>
-            <exception cref="T:System.ArgumentException">Se a estratégia não existir</exception>
         </member>
         <member name="T:GerenciadorPedidos.Domain.Services.CalculoImpostoReformaStrategyServices">
             <summary>
@@ -255,9 +339,178 @@
         <member name="T:GerenciadorPedidos.Domain.Services.FeatureFlagService">
             <summary>
             Serviço responsável por gerenciar as Feature Flags do sistema.
-            Controla a ativação/desativação de funcionalidades como a Reforma Tributária.
-            Exemplo de configuração: "FeatureFlags": { "ReformaTributaria": false }
+            Implementa o padrão Feature Toggle para controlar funcionalidades em tempo de execução.
             </summary>
+            <remarks>
+            Este serviço permite:
+            - Ativar/desativar funcionalidades sem deploy
+            - Testes A/B
+            - Lançamento gradual de features
+            - Controle de funcionalidades por ambiente
+            </remarks>
+        </member>
+        <member name="F:GerenciadorPedidos.Domain.Services.FeatureFlagService._configuration">
+            <summary>
+            Configuração do .NET Core que contém as feature flags.
+            Permite acesso às configurações definidas no appsettings.json
+            </summary>
+        </member>
+        <member name="F:GerenciadorPedidos.Domain.Services.FeatureFlagService.FeatureFlagsSection">
+            <summary>
+            Nome da seção no arquivo de configuração que contém as feature flags.
+            Usado para agrupar todas as flags em uma única seção.
+            </summary>
+        </member>
+        <member name="M:GerenciadorPedidos.Domain.Services.FeatureFlagService.#ctor(Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            Construtor que inicializa o serviço com a configuração necessária.
+            </summary>
+            <param name="configuration">
+            Configuração do .NET Core injetada via DI.
+            Deve conter a seção "FeatureFlags" configurada.
+            </param>
+            <exception cref="T:System.ArgumentNullException">
+            Lançada se a configuration for nula
+            </exception>
+        </member>
+        <member name="M:GerenciadorPedidos.Domain.Services.FeatureFlagService.IsEnabled(System.String)">
+            <summary>
+            Verifica se uma feature flag está habilitada.
+            </summary>
+            <param name="featureName">
+            Nome da feature flag a ser verificada.
+            Deve corresponder exatamente ao nome na configuração.
+            </param>
+            <returns>
+            true se a feature está habilitada,
+            false se está desabilitada ou não existe
+            </returns>
+        </member>
+        <member name="M:GerenciadorPedidos.Domain.Services.FeatureFlagService.ObterTodasFeatureFlags">
+            <summary>
+            Obtém todas as feature flags configuradas e seus valores.
+            Método útil para diagnóstico e logging.
+            </summary>
+            <returns>
+            Dicionário com os nomes das features e seus estados
+            </returns>
+        </member>
+        <member name="M:GerenciadorPedidos.Domain.Services.FeatureFlagService.FeatureExiste(System.String)">
+            <summary>
+            Verifica se uma feature flag está configurada,
+            independente de seu valor.
+            </summary>
+            <param name="featureName">Nome da feature flag</param>
+            <returns>
+            true se a feature está configurada,
+            false se não existe na configuração
+            </returns>
+        </member>
+        <member name="M:GerenciadorPedidos.Domain.Services.FeatureFlagService.ValidarFeatureFlag(System.String)">
+            <summary>
+            Valida se uma feature flag está corretamente configurada.
+            Verifica a existência e o tipo do valor.
+            </summary>
+            <param name="featureName">Nome da feature flag</param>
+            <returns>
+            true se a configuração é válida,
+            false se há algum problema
+            </returns>
+        </member>
+        <member name="T:GerenciadorPedidos.Domain.Services.PedidoService">
+            <summary>
+            Serviço principal responsável pelo gerenciamento de pedidos no sistema.
+            Implementa as regras de negócio relacionadas a pedidos, incluindo:
+            - Criação de pedidos com validação de duplicidade
+            - Cálculo de impostos usando diferentes estratégias
+            - Integração com Sistema B
+            - Gerenciamento do ciclo de vida do pedido
+            </summary>
+        </member>
+        <member name="F:GerenciadorPedidos.Domain.Services.PedidoService._pedidoRepository">
+            <summary>
+            Repositório para operações de persistência de pedidos.
+            </summary>
+        </member>
+        <member name="F:GerenciadorPedidos.Domain.Services.PedidoService._calculadoraImposto">
+            <summary>
+            Serviço responsável pelo cálculo de impostos.
+            Utiliza diferentes estratégias baseadas em feature flags.
+            </summary>
+        </member>
+        <member name="F:GerenciadorPedidos.Domain.Services.PedidoService._sistemaBService">
+            <summary>
+            Serviço de integração com o Sistema B.
+            Responsável por enviar pedidos processados.
+            </summary>
+        </member>
+        <member name="F:GerenciadorPedidos.Domain.Services.PedidoService._logger">
+            <summary>
+            Serviço de logging para rastreamento de operações.
+            Utiliza logging estruturado para melhor diagnóstico.
+            </summary>
+        </member>
+        <member name="F:GerenciadorPedidos.Domain.Services.PedidoService._mapper">
+            <summary>
+            Serviço de mapeamento entre DTOs e entidades.
+            Configurado via AutoMapper profiles.
+            </summary>
+        </member>
+        <member name="M:GerenciadorPedidos.Domain.Services.PedidoService.#ctor(GerenciadorPedidos.Domain.Interfaces.IRepositories.IPedidoRepository,GerenciadorPedidos.Domain.Interfaces.IServices.ICalculadoraImpostoService,GerenciadorPedidos.Domain.Interfaces.IServices.ISistemaBService,Microsoft.Extensions.Logging.ILogger{GerenciadorPedidos.Domain.Services.PedidoService},AutoMapper.IMapper)">
+            <summary>
+            Construtor que inicializa o serviço com todas as dependências necessárias.
+            </summary>
+            <param name="pedidoRepository">Repositório de pedidos</param>
+            <param name="calculadoraImposto">Serviço de cálculo de impostos</param>
+            <param name="sistemaBService">Serviço de integração com Sistema B</param>
+            <param name="logger">Serviço de logging</param>
+            <param name="mapper">Serviço de mapeamento</param>
+            <exception cref="T:System.ArgumentNullException">
+            Lançada se qualquer dependência for nula
+            </exception>
+        </member>
+        <member name="M:GerenciadorPedidos.Domain.Services.PedidoService.CriarPedidoAsync(GerenciadorPedidos.Domain.Entities.DataTransferObjects.NovoPedidoDTO)">
+            <summary>
+            Cria um novo pedido no sistema, aplicando todas as regras de negócio.
+            </summary>
+            <param name="pedidoDto">Dados do novo pedido</param>
+            <returns>Pedido criado com dados completos</returns>
+            <exception cref="T:GerenciadorPedidos.Domain.Exceptions.DomainException">
+            Lançada em caso de violação de regras de negócio:
+            </exception>
+        </member>
+        <member name="M:GerenciadorPedidos.Domain.Services.PedidoService.ObterPedidoPorIdAsync(System.Int32)">
+            <summary>
+            Obtém um pedido pelo seu ID interno.
+            </summary>
+            <param name="id">ID interno do pedido</param>
+            <returns>Dados do pedido encontrado</returns>
+            <exception cref="T:GerenciadorPedidos.Domain.Exceptions.DomainException">
+            Lançada quando o pedido não é encontrado
+            </exception>
+        </member>
+        <member name="M:GerenciadorPedidos.Domain.Services.PedidoService.ListarPedidosPorStatusAsync(GerenciadorPedidos.Domain.Enums.EnumStatus)">
+            <summary>
+            Lista pedidos por status
+            </summary>
+            <param name="status">Status dos pedidos a serem listados</param>
+            <returns>Lista de pedidos no status especificado</returns>
+        </member>
+        <member name="M:GerenciadorPedidos.Domain.Services.PedidoService.ValidarPedido(GerenciadorPedidos.Domain.Entities.Objects.Pedido)">
+            <summary>
+            Valida os dados básicos de um pedido.
+            </summary>
+            <param name="pedido">Pedido a ser validado</param>
+            <exception cref="T:GerenciadorPedidos.Domain.Exceptions.DomainException">
+            Lançada quando há dados inválidos
+            </exception>
+        </member>
+        <member name="M:GerenciadorPedidos.Domain.Services.PedidoService.PodeModificarPedido(GerenciadorPedidos.Domain.Enums.EnumStatus)">
+            <summary>
+            Valida se um pedido pode ser modificado com base em seu status.
+            </summary>
+            <param name="status">Status atual do pedido</param>
+            <returns>true se o pedido pode ser modificado</returns>
         </member>
     </members>
 </doc>

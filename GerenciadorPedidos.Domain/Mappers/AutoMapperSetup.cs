@@ -14,6 +14,7 @@ namespace GerenciadorPedidos.Domain.Mappers
                 .ForMember(dest => dest.PedidoId, opt => opt.MapFrom(src => src.PedidoId))
                 .ForMember(dest => dest.ClienteId, opt => opt.MapFrom(src => src.ClienteId))
                 .ForMember(dest => dest.Imposto, opt => opt.MapFrom(src => src.Imposto))
+                .ForMember(dest => dest.DataCriacao, opt => opt.MapFrom(src => src.DataCriacao))
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
                 .ForMember(dest => dest.Itens, opt => opt.MapFrom(src => src.Itens));
 

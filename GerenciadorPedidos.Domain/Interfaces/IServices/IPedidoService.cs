@@ -1,5 +1,4 @@
 using GerenciadorPedidos.Domain.Entities.DataTransferObjects;
-using GerenciadorPedidos.Domain.Entities.Objects;
 using GerenciadorPedidos.Domain.Enums;
 
 namespace GerenciadorPedidos.Domain.Interfaces.IServices
