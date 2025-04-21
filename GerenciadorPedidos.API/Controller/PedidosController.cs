@@ -73,7 +73,7 @@ namespace GerenciadorPedidos.API.Controller
         }
 
         /// <summary>
-        /// Obtém um pedido pelo ID
+        /// Obtém um pedido pelo ID   
         /// </summary>
         /// <param name="id">ID do pedido</param>
         /// <returns>Dados do pedido</returns>
