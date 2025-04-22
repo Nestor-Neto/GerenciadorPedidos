@@ -4,6 +4,46 @@
         <name>GerenciadorPedidos.Domain</name>
     </assembly>
     <members>
+        <member name="T:GerenciadorPedidos.Domain.Configuration.ProcessamentoConfig">
+            <summary>
+            Configurações para o processamento em lote de pedidos
+            </summary>
+        </member>
+        <member name="P:GerenciadorPedidos.Domain.Configuration.ProcessamentoConfig.TamanhoLotePadrao">
+            <summary>
+            Tamanho padrão do lote de processamento
+            </summary>
+        </member>
+        <member name="P:GerenciadorPedidos.Domain.Configuration.ProcessamentoConfig.MaxProcessamentosSimultaneos">
+            <summary>
+            Número máximo de processamentos simultâneos
+            </summary>
+        </member>
+        <member name="P:GerenciadorPedidos.Domain.Configuration.ProcessamentoConfig.DelayEntreLotesMs">
+            <summary>
+            Delay em milissegundos entre o processamento de lotes
+            </summary>
+        </member>
+        <member name="P:GerenciadorPedidos.Domain.Configuration.ProcessamentoConfig.TamanhoLoteMaximo">
+            <summary>
+            Tamanho máximo permitido para um lote
+            </summary>
+        </member>
+        <member name="P:GerenciadorPedidos.Domain.Configuration.ProcessamentoConfig.TamanhoLoteMinimo">
+            <summary>
+            Tamanho mínimo permitido para um lote
+            </summary>
+        </member>
+        <member name="T:GerenciadorPedidos.Domain.Entities.DataTransferObjects.LotePedidosDTO">
+            <summary>
+            DTO para recebimento de lote de pedidos
+            </summary>
+        </member>
+        <member name="P:GerenciadorPedidos.Domain.Entities.DataTransferObjects.LotePedidosDTO.Pedidos">
+            <summary>
+            Lista de pedidos a serem processados em lote
+            </summary>
+        </member>
         <member name="P:GerenciadorPedidos.Domain.Entities.DataTransferObjects.NovoPedidoDTO.PedidoId">
             <summary>
             ID do pedido no sistema externo
@@ -98,6 +138,56 @@
             Status atual do pedido
             </summary>
         </member>
+        <member name="T:GerenciadorPedidos.Domain.Entities.DataTransferObjects.ResultadoProcessamentoLoteDTO">
+            <summary>
+            DTO que representa o resultado do processamento em lote de pedidos
+            </summary>
+        </member>
+        <member name="M:GerenciadorPedidos.Domain.Entities.DataTransferObjects.ResultadoProcessamentoLoteDTO.#ctor">
+            <summary>
+            Construtor que inicializa as listas
+            </summary>
+        </member>
+        <member name="P:GerenciadorPedidos.Domain.Entities.DataTransferObjects.ResultadoProcessamentoLoteDTO.Sucessos">
+            <summary>
+            Lista de pedidos processados com sucesso
+            </summary>
+        </member>
+        <member name="P:GerenciadorPedidos.Domain.Entities.DataTransferObjects.ResultadoProcessamentoLoteDTO.Erros">
+            <summary>
+            Lista de erros ocorridos durante o processamento
+            </summary>
+        </member>
+        <member name="P:GerenciadorPedidos.Domain.Entities.DataTransferObjects.ResultadoProcessamentoLoteDTO.TotalProcessado">
+            <summary>
+            Total de pedidos processados no lote
+            </summary>
+        </member>
+        <member name="P:GerenciadorPedidos.Domain.Entities.DataTransferObjects.ResultadoProcessamentoLoteDTO.TotalSucesso">
+            <summary>
+            Total de pedidos processados com sucesso
+            </summary>
+        </member>
+        <member name="P:GerenciadorPedidos.Domain.Entities.DataTransferObjects.ResultadoProcessamentoLoteDTO.TotalErros">
+            <summary>
+            Total de pedidos que apresentaram erro
+            </summary>
+        </member>
+        <member name="T:GerenciadorPedidos.Domain.Entities.DataTransferObjects.ErroProcessamentoDTO">
+            <summary>
+            DTO que representa um erro ocorrido durante o processamento de um pedido
+            </summary>
+        </member>
+        <member name="P:GerenciadorPedidos.Domain.Entities.DataTransferObjects.ErroProcessamentoDTO.PedidoId">
+            <summary>
+            ID do pedido que apresentou erro
+            </summary>
+        </member>
+        <member name="P:GerenciadorPedidos.Domain.Entities.DataTransferObjects.ErroProcessamentoDTO.Mensagem">
+            <summary>
+            Mensagem detalhada do erro
+            </summary>
+        </member>
         <member name="T:GerenciadorPedidos.Domain.Entities.Objects.Pedido">
             <summary>
             Representa um pedido no sistema
@@ -153,6 +243,11 @@
         <member name="F:GerenciadorPedidos.Domain.Enums.EnumStatus.Cancelado">
             <summary>
             Pedido cancelado
+            </summary>
+        </member>
+        <member name="F:GerenciadorPedidos.Domain.Enums.EnumStatus.Erro">
+            <summary>
+            Pedido com erro
             </summary>
         </member>
         <member name="T:GerenciadorPedidos.Domain.Exceptions.DomainException">
@@ -237,6 +332,13 @@
             </summary>
             <param name="pedido">Pedido para cálculo do imposto</param>
             <returns>Valor do imposto calculado</returns>
+        </member>
+        <member name="M:GerenciadorPedidos.Domain.Interfaces.IServices.IPedidoService.ProcessarPedidosAsync(System.Collections.Generic.List{GerenciadorPedidos.Domain.Entities.DataTransferObjects.NovoPedidoDTO})">
+            <summary>
+            Processa uma lista de pedidos em lote
+            </summary>
+            <param name="pedidos">Lista de pedidos a serem processados</param>
+            <returns>Resultado do processamento com sucessos e falhas</returns>
         </member>
         <member name="T:GerenciadorPedidos.Domain.Services.CalculadoraImpostoService">
             <summary>
@@ -511,6 +613,13 @@
             </summary>
             <param name="status">Status atual do pedido</param>
             <returns>true se o pedido pode ser modificado</returns>
+        </member>
+        <member name="M:GerenciadorPedidos.Domain.Services.PedidoService.ProcessarPedidosAsync(System.Collections.Generic.List{GerenciadorPedidos.Domain.Entities.DataTransferObjects.NovoPedidoDTO})">
+            <summary>
+            Processa uma lista de pedidos em lote
+            </summary>
+            <param name="pedidos">Lista de pedidos a serem processados</param>
+            <returns>Resultado do processamento com sucessos e falhas</returns>
         </member>
     </members>
 </doc>

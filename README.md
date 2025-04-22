@@ -127,8 +127,12 @@ O projeto segue a arquitetura em camadas, com separação clara de responsabilid
        - Gerenciamento do ciclo de vida do pedido
        - `CriarPedido`: Cria um novo pedido no sistema, aplicando todas as regras de negócio
        - `ObterPedidoPorId`: Obtém um pedido pelo seu ID interno.
-       - `ListarPedidosPorStatusAsync`: Lista todos os pedidos com um determinado status.
-       
+       - `ListarPedidosPorStatus`: Lista todos os pedidos com um determinado status.
+      - `ProcessamentoPedidoService`
+       - Serviço responsável pelo processamento em lote de pedidos, Implementa estratégias para lidar com alto volume de dados.
+       - `SemaphoreSlim`: Semáforo para controlar o número máximo de processamentos simultâneos, Evita sobrecarga do sistema e do banco de dados.
+       - `ObterLotePedidos`: Obtém um lote de pedidos para processamento e aplica filtros conforme configuração (lote de pedidos com status {Status} TamanhoPadrao={TamanhoPadrao}, Min={Min}, Max={Max})
+       - `ProcessarPedidos`: Processa uma lista de pedidos em lotes. Implementa controle automático de processamento baseado na configuração
 
        ##### Factory (Fábrica de Estratégias)
        **Explicação da Factory:**

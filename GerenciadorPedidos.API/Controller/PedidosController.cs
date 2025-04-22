@@ -130,5 +130,38 @@ namespace GerenciadorPedidos.API.Controller
                 return StatusCode(500, new { message = "Erro interno ao processar a requisição", details = ex.Message });
             }
         }
+
+        /// <summary>
+        /// Cria um lote de pedidos
+        /// </summary>
+        /// <param name="lotePedidos">Lista de pedidos a serem criados em lote</param>
+        /// <returns>Resultado do processamento em lote com sucessos e falhas</returns>
+        /// <response code="200">Lote processado com sucesso</response>
+        /// <response code="400">Dados inválidos no lote</response>
+        /// <response code="500">Erro interno no processamento</response>
+        [HttpPost("lote")]
+        [ProducesResponseType(typeof(ResultadoProcessamentoLoteDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> CriarLotePedidos([FromBody] LotePedidosDTO lotePedidos)
+        {
+            if (lotePedidos?.Pedidos == null || !lotePedidos.Pedidos.Any())
+            {
+                _logger.LogWarning("Tentativa de criar lote de pedidos com dados nulos ou vazios");
+                return BadRequest(new { message = "A lista de pedidos é obrigatória e não pode estar vazia" });
+            }
+
+            try
+            {
+                _logger.LogInformation("Iniciando criação de lote de pedidos");
+                var resultado = await _pedidoService.ProcessarPedidosAsync(lotePedidos.Pedidos);
+                return Ok(resultado);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erro ao processar lote de pedidos: {Message}", ex.Message);
+                return StatusCode(500, new { message = "Erro interno ao processar o lote de pedidos", details = ex.Message });
+            }
+        }
     }
 }

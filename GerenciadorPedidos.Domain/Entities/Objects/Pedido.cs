@@ -63,5 +63,10 @@ namespace GerenciadorPedidos.Domain.Entities.Objects
              
         }
 
+        public void AtualizarStatus(EnumStatus novoStatus)
+        {
+            Status = novoStatus;
+        }
+
     }
 }

@@ -253,5 +253,90 @@ namespace GerenciadorPedidos.Domain.Services
             return status == EnumStatus.Criado || 
                    status == EnumStatus.EmProcessamento;
         }
+    
+        /// <summary>
+        /// Processa uma lista de pedidos em lote
+        /// </summary>
+        /// <param name="pedidos">Lista de pedidos a serem processados</param>
+        /// <returns>Resultado do processamento com sucessos e falhas</returns>
+        public async Task<ResultadoProcessamentoLoteDTO> ProcessarPedidosAsync(List<NovoPedidoDTO> pedidos)
+        {
+            var resultados = new List<PedidoCriadoDTO>();
+            var erros = new List<ErroProcessamentoDTO>();
+
+            _logger.LogInformation(
+                "Iniciando processamento de lote com {Quantidade} pedidos", 
+                pedidos.Count
+            );
+
+            foreach (var pedido in pedidos)
+            {
+                try
+                {
+                    // Utiliza o método existente para criar o pedido
+                    var pedidoCriado = await CriarPedidoAsync(pedido);
+                    
+                    // Adiciona aos sucessos
+                    resultados.Add(new PedidoCriadoDTO
+                    {
+                        Id = pedidoCriado.Id,
+                        Status = pedidoCriado.Status
+                    });
+
+                    _logger.LogInformation(
+                        "Pedido {PedidoId} criado com sucesso no lote", 
+                        pedido.PedidoId
+                    );
+                }
+                catch (DomainException ex)
+                {
+                    erros.Add(new ErroProcessamentoDTO
+                    {
+                        PedidoId = pedido.PedidoId,
+                        Mensagem = ex.Message
+                    });
+
+                    _logger.LogWarning(
+                        ex,
+                        "Erro de domínio ao processar pedido {PedidoId} no lote: {Message}", 
+                        pedido.PedidoId,
+                        ex.Message
+                    );
+                }
+                catch (Exception ex)
+                {
+                    erros.Add(new ErroProcessamentoDTO
+                    {
+                        PedidoId = pedido.PedidoId,
+                        Mensagem = "Erro interno ao processar o pedido"
+                    });
+
+                    _logger.LogError(
+                        ex,
+                        "Erro interno ao processar pedido {PedidoId} no lote: {Message}", 
+                        pedido.PedidoId,
+                        ex.Message
+                    );
+                }
+            }
+
+            var resultado = new ResultadoProcessamentoLoteDTO
+            {
+                Sucessos = resultados,
+                Erros = erros,
+                TotalProcessado = pedidos.Count,
+                TotalSucesso = resultados.Count,
+                TotalErros = erros.Count
+            };
+
+            _logger.LogInformation(
+                "Processamento de lote concluído. Total: {Total}, Sucessos: {Sucessos}, Erros: {Erros}",
+                resultado.TotalProcessado,
+                resultado.TotalSucesso,
+                resultado.TotalErros
+            );
+
+            return resultado;
+        }
     }
 } 

@@ -26,8 +26,6 @@ namespace GerenciadorPedidos.Infra.CrossCutting.IoC
             // Configuração do Entity Framework
             services.AddDbContext<PedidoDbContext>(options =>
                 options.UseInMemoryDatabase("PedidosDb"));
-
-
             #region Banco 
             // Registro das dependências
             services.AddScoped<ICalculadoraImpostoService, CalculadoraImpostoService>();

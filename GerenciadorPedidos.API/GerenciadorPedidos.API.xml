@@ -31,6 +31,16 @@
             <returns>Lista de pedidos</returns>
             <response code="200">Lista de pedidos</response>
         </member>
+        <member name="M:GerenciadorPedidos.API.Controller.PedidosController.CriarLotePedidos(GerenciadorPedidos.Domain.Entities.DataTransferObjects.LotePedidosDTO)">
+            <summary>
+            Cria um lote de pedidos
+            </summary>
+            <param name="lotePedidos">Lista de pedidos a serem criados em lote</param>
+            <returns>Resultado do processamento em lote com sucessos e falhas</returns>
+            <response code="200">Lote processado com sucesso</response>
+            <response code="400">Dados inválidos no lote</response>
+            <response code="500">Erro interno no processamento</response>
+        </member>
         <member name="T:GerenciadorPedidos.API.Program">
             <summary>
             Program

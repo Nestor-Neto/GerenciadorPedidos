@@ -31,6 +31,11 @@ namespace GerenciadorPedidos.Domain.Enums
         /// <summary>
         /// Pedido cancelado
         /// </summary>
-        Cancelado = 5
+        Cancelado = 5,
+
+        /// <summary>
+        /// Pedido com erro
+        /// </summary>
+        Erro = 6
     }
 } 
